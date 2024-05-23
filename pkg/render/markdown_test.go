@@ -2,11 +2,12 @@ package render
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"testing"
 
-	"github.com/guumaster/hostctl/pkg/types"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 func TestNewMarkdownRenderer(t *testing.T) {
@@ -29,7 +30,7 @@ func TestNewMarkdownRenderer(t *testing.T) {
 	err := r.Render()
 	assert.NoError(t, err)
 
-	out, err := ioutil.ReadAll(b)
+	out, err := io.ReadAll(b)
 	assert.NoError(t, err)
 
 	expected := `

@@ -5,8 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/guumaster/hostctl/pkg/types"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 func TestHostFile(t *testing.T) {
@@ -40,6 +41,22 @@ func TestHostFile(t *testing.T) {
 			IP:        localhost,
 			HostNames: []string{"first.loc", "second.loc"},
 		}, data.Profiles["profile1"].Routes["127.0.0.1"])
+	})
+}
+
+func TestWrongHostFile(t *testing.T) {
+	testFile := `
+# This file should be parsed as comment
+# 1.1.1.1
+`
+
+	t.Run("Wrong Content", func(t *testing.T) {
+		f := strings.NewReader(testFile)
+
+		data, err := Parse(f)
+		assert.NoError(t, err)
+		assert.Len(t, data.ProfileNames, 0)
+		assert.Equal(t, data.DefaultProfile[2].Comment, "# 1.1.1.1")
 	})
 }
 

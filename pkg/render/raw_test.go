@@ -2,12 +2,13 @@ package render
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"regexp"
 	"testing"
 
-	"github.com/guumaster/hostctl/pkg/types"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 func TestNewRawRenderer(t *testing.T) {
@@ -30,7 +31,7 @@ func TestNewRawRenderer(t *testing.T) {
 	err := r.Render()
 	assert.NoError(t, err)
 
-	out, err := ioutil.ReadAll(b)
+	out, err := io.ReadAll(b)
 	assert.NoError(t, err)
 
 	expected := `

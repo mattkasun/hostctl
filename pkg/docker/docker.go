@@ -8,6 +8,7 @@ import (
 	dtypes "github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/client"
+
 	"github.com/guumaster/hostctl/pkg/types"
 )
 
@@ -71,6 +72,7 @@ func GetNetworkID(ctx context.Context, cli *client.Client, network string) (stri
 	for _, net := range nets {
 		if net.Name == network || net.ID == network {
 			networkID = net.ID
+
 			break
 		}
 	}
@@ -85,7 +87,7 @@ func GetNetworkID(ctx context.Context, cli *client.Client, network string) (stri
 func checkCli(opts *Options) error {
 	cli := opts.Cli
 	if cli == nil {
-		cli, err := client.NewEnvClient()
+		cli, err := client.NewClientWithOpts(client.FromEnv)
 		if err != nil {
 			return err
 		}

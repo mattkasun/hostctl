@@ -4,8 +4,9 @@ import (
 	"io"
 	"os"
 
-	"github.com/guumaster/hostctl/pkg/types"
 	"github.com/guumaster/tablewriter"
+
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 // TableRendererOptions contains options to render a table.
@@ -17,7 +18,7 @@ type TableRendererOptions struct {
 // RendererType represents all the existing renderers.
 type RendererType string
 
-// nolint:gochecknoglobals
+//nolint:gochecknoglobals
 var (
 	Markdown RendererType = "markdown"
 	Table    RendererType = "table"
@@ -105,7 +106,7 @@ func (t TableRenderer) AddSeparator() {
 }
 
 // Render prints a table representation of row content.
-func (t TableRenderer) Render() error { // nolint: unparam
+func (t TableRenderer) Render() error { //nolint: unparam
 	if t.meta.Rows > 0 {
 		t.table.Render()
 	}

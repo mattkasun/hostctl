@@ -2,14 +2,15 @@ package parser
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 	"testing"
 
 	"github.com/docker/docker/client"
-	"github.com/guumaster/hostctl/pkg/docker"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/guumaster/hostctl/pkg/docker"
 )
 
 func TestNewProfileFromDocker(t *testing.T) {
@@ -129,7 +130,7 @@ func newClientWithResponse(t *testing.T, resp map[string]string) *client.Client 
 	t.Helper()
 
 	v := "1.22"
-	c, err := client.NewClient("tcp://fake:2345", v,
+	c, err := client.NewClient("tcp://fake:2345", v, //nolint: staticcheck
 		&http.Client{
 			Transport: transportFunc(func(req *http.Request) (*http.Response, error) {
 				url := req.URL.Path
@@ -139,7 +140,7 @@ func newClientWithResponse(t *testing.T, resp map[string]string) *client.Client 
 				}
 				return &http.Response{
 					StatusCode: http.StatusOK,
-					Body:       ioutil.NopCloser(bytes.NewReader([]byte(b))),
+					Body:       io.NopCloser(bytes.NewReader([]byte(b))),
 				}, nil
 			}),
 		},

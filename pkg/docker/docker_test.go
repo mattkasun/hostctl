@@ -4,14 +4,15 @@ import (
 	"bytes"
 	"context"
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 
 	dtypes "github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
-	"github.com/guumaster/hostctl/pkg/types"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/guumaster/hostctl/pkg/types"
 )
 
 func TestNew(t *testing.T) {
@@ -101,7 +102,7 @@ func newClientWithResponse(t *testing.T, resp map[string]string) *client.Client 
 	t.Helper()
 
 	v := "1.22"
-	c, err := client.NewClient("tcp://fake:2345", v,
+	c, err := client.NewClient("tcp://fake:2345", v, //nolint: staticcheck
 		&http.Client{
 			Transport: transportFunc(func(req *http.Request) (*http.Response, error) {
 				url := req.URL.Path
@@ -111,11 +112,11 @@ func newClientWithResponse(t *testing.T, resp map[string]string) *client.Client 
 				}
 				return &http.Response{
 					StatusCode: http.StatusOK,
-					Body:       ioutil.NopCloser(bytes.NewReader([]byte(b))),
+					Body:       io.NopCloser(bytes.NewReader([]byte(b))),
 				}, nil
 			}),
 		},
-		map[string]string{})
+		map[string]string{}) //nolint: staticcheck
 
 	assert.NoError(t, err)
 
